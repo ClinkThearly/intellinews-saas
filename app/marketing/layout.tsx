@@ -1,8 +1,9 @@
-import '@/app/globals.css';
+/* ---------- app/marketing/layout.tsx (replace whole file) ---------- */
+import '@/app/globals.css';          // Tailwind base & fonts
 import AnimatedBackground from './components/AnimatedBackground';
 
 export const metadata = {
-  title: 'IntelliNews — Competitive-Intelligence, delivered weekly',
+  title: 'IntelliNews • Competitive-intelligence briefings',
 };
 
 export default function MarketingLayout({
@@ -12,12 +13,15 @@ export default function MarketingLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth antialiased">
-      {/* animated dark backdrop */}
-      <body className="relative min-h-screen text-white bg-black">
+      {/* Full-page dark base colour so translucent blacks show correctly */}
+      <body className="relative min-h-screen bg-black text-white">
+        {/* Gradient / grid / blurred lights – covers the whole viewport */}
         <AnimatedBackground />
-        {/* keep all real content above the background */}
+
+        {/* Actual page content */}
         <main className="relative z-10">{children}</main>
       </body>
     </html>
   );
 }
+/* ------------------------------------------------------------------- */
