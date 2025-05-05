@@ -25,8 +25,9 @@ export async function POST(req: NextRequest) {
   }
 
   if (event.type === 'checkout.session.completed') {
-    const s = event.data.object as Stripe.Checkout.Session;
-    const email = s.customer_details?.email;
+    const s      = event.data.object as Stripe.Checkout.Session;
+    const email  = s.customer_details?.email;
+    const userId = crypto.randomUUID();               // 🔑 generate a UUID for the new profile
 
     if (!email) {
       console.error('No email on session');
@@ -43,7 +44,7 @@ export async function POST(req: NextRequest) {
     if (!user) {
       const { data: newUser, error } = await supabase
         .from('profiles')
-        .insert({ email })
+        .insert({ id: userId, email })                // 👉 supply id explicitly
         .select('id')
         .single();
       if (error) {
