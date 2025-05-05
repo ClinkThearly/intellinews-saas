@@ -28,11 +28,11 @@ export default function AnimatedBackground() {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 2 + 1,
-        color: `rgba(125, 75, 255, ${Math.random() * 0.5 + 0.1})`,
+        radius: Math.random() * 1.5 + 0.5,
+        color: `rgba(59, 130, 246, ${Math.random() * 0.2 + 0.05})`, // Blue with low opacity
         velocity: {
-          x: Math.random() * 0.5 - 0.25,
-          y: Math.random() * 0.5 - 0.25
+          x: Math.random() * 0.3 - 0.15,
+          y: Math.random() * 0.3 - 0.15
         }
       });
     }
@@ -69,7 +69,7 @@ export default function AnimatedBackground() {
           
           if (distance < 100) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(125, 75, 255, ${0.2 * (1 - distance / 100)})`;
+            ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 * (1 - distance / 100)})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(particleA.x, particleA.y);
             ctx.lineTo(particleB.x, particleB.y);
@@ -89,7 +89,7 @@ export default function AnimatedBackground() {
   return (
     <canvas 
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full pointer-events-none opacity-40 bg-gradient-to-b from-black to-gray-900"
+      className="fixed top-0 left-0 w-full h-full pointer-events-none bg-gradient-to-b from-white to-blue-50"
     />
   );
 }

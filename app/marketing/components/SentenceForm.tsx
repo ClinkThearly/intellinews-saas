@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 // Dropdown component with improved styling
 const Dropdown = ({ 
@@ -22,7 +22,7 @@ const Dropdown = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center justify-center bg-purple-600 bg-opacity-20 border border-purple-500 border-opacity-30 px-3 py-1 rounded-md text-white font-medium"
+        className="inline-flex items-center justify-center bg-blue-50 border border-blue-200 px-3 py-1 rounded-md text-blue-700 font-medium"
       >
         {value}
         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -31,7 +31,7 @@ const Dropdown = ({
       </button>
       
       {isOpen && (
-        <div className="absolute z-10 mt-1 rounded-md bg-gray-900 border border-purple-500 border-opacity-20 shadow-lg w-full min-w-[180px]">
+        <div className="absolute z-10 mt-1 rounded-md bg-white border border-gray-200 shadow-lg w-full min-w-[180px]">
           <div className="py-1 max-h-60 overflow-auto">
             {options.map((option) => (
               <button
@@ -39,8 +39,8 @@ const Dropdown = ({
                 type="button"
                 className={`block w-full text-left px-4 py-2 text-sm ${
                   option === value 
-                    ? 'bg-purple-600 bg-opacity-20 text-white' 
-                    : 'text-gray-300 hover:bg-gray-800'
+                    ? 'bg-blue-50 text-blue-700' 
+                    : 'text-gray-700 hover:bg-gray-50'
                 }`}
                 onClick={() => {
                   onChange(option);
@@ -93,15 +93,15 @@ export default function SentenceForm({
   };
 
   return (
-    <div className="backdrop-blur-md bg-black bg-opacity-30 rounded-xl border border-white border-opacity-10 p-6 h-full">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-md p-6 h-full">
       <div className="text-center mb-6">
-        <h3 className="text-xl font-medium text-white mb-2">Customize Your Intelligence Brief</h3>
-        <p className="text-gray-400 text-sm">Tailor your competitive intelligence to your specific needs</p>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">Customize Your Intelligence Brief</h3>
+        <p className="text-gray-600 text-sm">Tailor your competitive intelligence to your specific needs</p>
       </div>
       
       <form onSubmit={handleSubmit} className="flex flex-col h-[calc(100%-100px)]">
         <div className="space-y-6 flex-grow">
-          <div className="text-center text-lg text-white">
+          <div className="text-center text-lg text-gray-800">
             <p className="leading-relaxed mb-4">
               I am a{" "}
               <Dropdown
@@ -121,23 +121,23 @@ export default function SentenceForm({
             </p>
           </div>
           
-          <div className="bg-white bg-opacity-5 border border-white border-opacity-10 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-white mb-2">What you'll receive:</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h4 className="text-sm font-medium text-gray-900 mb-2">What you'll receive:</h4>
+            <ul className="space-y-2 text-sm text-gray-700">
               <li className="flex items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-400 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <span>Weekly competitive intelligence tailored to {values.industry}</span>
               </li>
               <li className="flex items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-400 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <span>Curated market insights relevant to your role as {values.role}</span>
               </li>
               <li className="flex items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-400 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <span>AI-powered analysis with actionable recommendations</span>
@@ -149,12 +149,12 @@ export default function SentenceForm({
         <div className="mt-6 text-center">
           <button
             type="submit"
-            className="inline-flex items-center bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:from-purple-700 hover:to-indigo-700"
+            className="inline-flex items-center bg-blue-600 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:bg-blue-700"
           >
             Generate my preview
-            <ArrowUpRight size={16} className="ml-2" />
+            <ArrowRight size={16} className="ml-2" />
           </button>
-          <p className="mt-3 text-gray-400 text-xs">No credit card required</p>
+          <p className="mt-3 text-gray-500 text-xs">No credit card required</p>
         </div>
       </form>
     </div>
