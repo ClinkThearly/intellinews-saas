@@ -5,45 +5,43 @@ import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
 export async function getUser() {
-  const sessionCookie = (await cookies()).get('session');
-  if (!sessionCookie || !sessionCookie.value) {
+  const session = cookies().get('session')?.value;
+  
+  if (!session) {
     return null;
   }
-
-  const sessionData = await verifyToken(sessionCookie.value);
-  if (
-    !sessionData ||
-    !sessionData.user ||
-    typeof sessionData.user.id !== 'number'
-  ) {
+  
+  try {
+    const payload = await verifyToken(session);
+    
+    if (!payload || !payload.user || !payload.user.id) {
+      return null;
+    }
+    
+    const user = await db
+      .select()
+      .from(users)
+      .where(and(
+        eq(users.id, payload.user.id),
+        isNull(users.deleted_at)
+      ))
+      .limit(1);
+    
+    return user[0] || null;
+  } catch (error) {
+    console.error('Session verification error:', error);
     return null;
   }
-
-  if (new Date(sessionData.expires) < new Date()) {
-    return null;
-  }
-
-  const user = await db
-    .select()
-    .from(users)
-    .where(and(eq(users.id, sessionData.user.id), isNull(users.deletedAt)))
-    .limit(1);
-
-  if (user.length === 0) {
-    return null;
-  }
-
-  return user[0];
 }
 
 export async function getTeamByStripeCustomerId(customerId: string) {
-  const result = await db
+  const team = await db
     .select()
     .from(teams)
-    .where(eq(teams.stripeCustomerId, customerId))
+    .where(eq(teams.stripe_customer_id, customerId))
     .limit(1);
-
-  return result.length > 0 ? result[0] : null;
+  
+  return team[0] || null;
 }
 
 export async function updateTeamSubscription(
@@ -58,73 +56,124 @@ export async function updateTeamSubscription(
   await db
     .update(teams)
     .set({
-      ...subscriptionData,
-      updatedAt: new Date()
+      stripe_subscription_id: subscriptionData.stripeSubscriptionId,
+      stripe_product_id: subscriptionData.stripeProductId,
+      plan_name: subscriptionData.planName,
+      subscription_status: subscriptionData.subscriptionStatus,
+      updated_at: new Date()
     })
     .where(eq(teams.id, teamId));
 }
 
 export async function getUserWithTeam(userId: number) {
-  const result = await db
+  const member = await db
     .select({
       user: users,
-      teamId: teamMembers.teamId
+      team: teams,
+      role: teamMembers.role
     })
-    .from(users)
-    .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
-    .where(eq(users.id, userId))
+    .from(teamMembers)
+    .innerJoin(users, eq(users.id, teamMembers.user_id))
+    .innerJoin(teams, eq(teams.id, teamMembers.team_id))
+    .where(eq(teamMembers.user_id, userId))
     .limit(1);
-
-  return result[0];
+  
+  if (!member[0]) {
+    return null;
+  }
+  
+  return {
+    user: member[0].user,
+    team: member[0].team,
+    role: member[0].role
+  };
 }
 
 export async function getActivityLogs() {
   const user = await getUser();
+  
   if (!user) {
-    throw new Error('User not authenticated');
+    return [];
   }
-
-  return await db
+  
+  const userWithTeam = await getUserWithTeam(user.id);
+  
+  if (!userWithTeam || !userWithTeam.team) {
+    return [];
+  }
+  
+  const logs = await db
     .select({
       id: activityLogs.id,
       action: activityLogs.action,
       timestamp: activityLogs.timestamp,
-      ipAddress: activityLogs.ipAddress,
-      userName: users.name
+      ipAddress: activityLogs.ip_address,
+      user: {
+        id: users.id,
+        name: users.name,
+        email: users.email
+      }
     })
     .from(activityLogs)
-    .leftJoin(users, eq(activityLogs.userId, users.id))
-    .where(eq(activityLogs.userId, user.id))
+    .leftJoin(users, eq(users.id, activityLogs.user_id))
+    .where(eq(activityLogs.team_id, userWithTeam.team.id))
     .orderBy(desc(activityLogs.timestamp))
-    .limit(10);
+    .limit(100);
+  
+  return logs;
 }
 
 export async function getTeamForUser() {
   const user = await getUser();
+  
   if (!user) {
     return null;
   }
-
-  const result = await db.query.teamMembers.findFirst({
-    where: eq(teamMembers.userId, user.id),
-    with: {
-      team: {
-        with: {
-          teamMembers: {
-            with: {
-              user: {
-                columns: {
-                  id: true,
-                  name: true,
-                  email: true
-                }
-              }
-            }
-          }
-        }
+  
+  // Modified to use standard select instead of findFirst
+  const memberQuery = await db
+    .select()
+    .from(teamMembers)
+    .where(eq(teamMembers.user_id, user.id))
+    .limit(1);
+  
+  if (!memberQuery[0]) {
+    return null;
+  }
+  
+  const teamId = memberQuery[0].team_id;
+  
+  // Get the team
+  const teamQuery = await db
+    .select()
+    .from(teams)
+    .where(eq(teams.id, teamId))
+    .limit(1);
+  
+  if (!teamQuery[0]) {
+    return null;
+  }
+  
+  // Get all team members
+  const allTeamMembers = await db
+    .select({
+      teamMember: teamMembers,
+      user: {
+        id: users.id,
+        name: users.name,
+        email: users.email
       }
-    }
-  });
-
-  return result?.team || null;
+    })
+    .from(teamMembers)
+    .innerJoin(users, eq(users.id, teamMembers.user_id))
+    .where(eq(teamMembers.team_id, teamId));
+  
+  // Format the response
+  return {
+    ...teamQuery[0],
+    teamMembers: allTeamMembers.map(tm => ({
+      ...tm.teamMember,
+      user: tm.user
+    }))
+  };
 }
