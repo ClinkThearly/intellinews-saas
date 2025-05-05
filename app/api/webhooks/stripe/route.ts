@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const email = s.customer_details?.email;
     if (!email) return NextResponse.json({ received: true }, { status: 200 });
 
-    /* 1. get or create profile + auth user */
+    /* 1 ▸ ensure Auth user + profile */
     let { data: user } = await supabase
       .from('profiles')
       .select('id')
@@ -39,27 +39,30 @@ export async function POST(req: NextRequest) {
     if (!user) {
       const { data: authRes, error: authErr } =
         await supabase.auth.admin.createUser({ email, email_confirm: true });
-
       if (authErr || !authRes?.user) {
         console.error('Auth user create failed', authErr);
         return NextResponse.json({ received: true }, { status: 200 });
       }
-
-      const authId = authRes.user.id;                 // ✅ correct path
+      const authId = authRes.user.id;
       await supabase.from('profiles').insert({ id: authId, email });
       user = { id: authId };
     }
 
-    /* 2. upsert subscription */
-    await supabase.from('subscriptions').upsert({
-      user_id: user.id,
-      stripe_customer_id: s.customer as string,
+    /* 2 ▸ upsert subscription  +  log any error */
+    const { error: subErr } = await supabase.from('subscriptions').upsert({
+      user_id:              user.id,
+      stripe_customer_id:   s.customer as string,
       stripe_subscription_id: s.subscription as string,
-      plan: 'pro',
+      plan:   'pro',
       status: 'active',
-      current_period_end: new Date(Number(s.expires_at) * 1000).toISOString()
+      current_period_end: new Date().toISOString()   // temp fallback
     });
-    console.log('✅ Subscription saved for', user.id);
+
+    if (subErr) {
+      console.error('⛔ sub upsert error', subErr);
+    } else {
+      console.log('✅ Subscription saved for', user.id);
+    }
   }
 
   return NextResponse.json({ received: true }, { status: 200 });
