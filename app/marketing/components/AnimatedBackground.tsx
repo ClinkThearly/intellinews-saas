@@ -1,17 +1,106 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+
 export default function AnimatedBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas dimensions
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    // Initialize
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Create particles
+    const particles: Particle[] = [];
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2 + 1,
+        color: `rgba(125, 75, 255, ${Math.random() * 0.5 + 0.1})`,
+        velocity: {
+          x: Math.random() * 0.5 - 0.25,
+          y: Math.random() * 0.5 - 0.25
+        }
+      });
+    }
+
+    // Animation loop
+    const animate = () => {
+      requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update and draw particles
+      particles.forEach(particle => {
+        // Update position
+        particle.x += particle.velocity.x;
+        particle.y += particle.velocity.y;
+
+        // Boundary check
+        if (particle.x < 0 || particle.x > canvas.width) particle.velocity.x *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.velocity.y *= -1;
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
+        ctx.fill();
+      });
+
+      // Draw connections
+      particles.forEach((particleA, i) => {
+        particles.slice(i + 1).forEach(particleB => {
+          const distance = Math.sqrt(
+            Math.pow(particleA.x - particleB.x, 2) + 
+            Math.pow(particleA.y - particleB.y, 2)
+          );
+          
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(125, 75, 255, ${0.2 * (1 - distance / 100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particleA.x, particleA.y);
+            ctx.lineTo(particleB.x, particleB.y);
+            ctx.stroke();
+          }
+        });
+      });
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
   return (
-    <div className="absolute inset-0 -z-10">
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
-      <div className="absolute inset-0 opacity-20 animate-[gradient_15s_ease_infinite]"
-           style={{background:
-             'linear-gradient(125deg,#121212 0%,#2d1b69 25%,#121212 50%,#1a0b2e 75%,#121212 100%)',
-             backgroundSize:'400% 400%'}} />
-      <div className="absolute inset-0 opacity-10"
-           style={{backgroundImage:
-             'radial-gradient(rgba(255,255,255,0.1) 1px,transparent 1px)',
-             backgroundSize:'30px 30px'}} />
-      <div className="absolute top-1/4 left-1/4  w-32 h-32 rounded-full bg-purple-600 opacity-10 blur-3xl" />
-      <div className="absolute bottom-1/3 right-1/4 w-64 h-64 rounded-full bg-blue-600   opacity-5  blur-3xl" />
-    </div>
+    <canvas 
+      ref={canvasRef}
+      className="fixed top-0 left-0 w-full h-full pointer-events-none opacity-40 bg-gradient-to-b from-black to-gray-900"
+    />
   );
+}
+
+interface Particle {
+  x: number;
+  y: number;
+  radius: number;
+  color: string;
+  velocity: {
+    x: number;
+    y: number;
+  };
 }
