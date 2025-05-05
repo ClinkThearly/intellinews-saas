@@ -1,7 +1,8 @@
-import '@/styles/globals.css';           // your Tailwind base
-import AnimatedBackground from './components/AnimatedBackground';
+// app/marketing/layout.tsx
+import '@/styles/globals.css';
+import AnimatedBackground from '@/app/marketing/components/AnimatedBackground';
 
-export const metadata = { title: 'IntelliNews • Competitive Intelligence, weekly' };
+export const metadata = { title: 'IntelliNews – Competitive intelligence, weekly' };
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
