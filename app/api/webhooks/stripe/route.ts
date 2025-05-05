@@ -25,16 +25,11 @@ export async function POST(req: NextRequest) {
   }
 
   if (event.type === 'checkout.session.completed') {
-    const s      = event.data.object as Stripe.Checkout.Session;
-    const email  = s.customer_details?.email;
-    const userId = crypto.randomUUID();               // 🔑 generate a UUID for the new profile
+    const s     = event.data.object as Stripe.Checkout.Session;
+    const email = s.customer_details?.email;
+    if (!email) return NextResponse.json({ received: true }, { status: 200 });
 
-    if (!email) {
-      console.error('No email on session');
-      return NextResponse.json({ received: true }, { status: 200 });
-    }
-
-    /* 1. get or create profile */
+    /* 1. ensure an Auth user exists */
     let { data: user } = await supabase
       .from('profiles')
       .select('id')
@@ -42,16 +37,16 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (!user) {
-      const { data: newUser, error } = await supabase
-        .from('profiles')
-        .insert({ id: userId, email })                // 👉 supply id explicitly
-        .select('id')
-        .single();
-      if (error) {
-        console.error('Profile insert failed', error);
+      // create auth user (no email invite)
+      const { data: authUser, error: authErr } =
+        await supabase.auth.admin.createUser({ email, email_confirm: true });
+      if (authErr || !authUser) {
+        console.error('Auth user create failed', authErr);
         return NextResponse.json({ received: true }, { status: 200 });
       }
-      user = newUser;
+      // add profile row with the same id
+      await supabase.from('profiles').insert({ id: authUser.id, email });
+      user = { id: authUser.id };
     }
 
     /* 2. upsert subscription */
@@ -63,7 +58,8 @@ export async function POST(req: NextRequest) {
       status: 'active',
       current_period_end: new Date(Number(s.expires_at) * 1000).toISOString()
     });
-    console.log('✅ Subscriptions row saved for', user.id);
+
+    console.log('✅ Subscription saved for', user.id);
   }
 
   return NextResponse.json({ received: true }, { status: 200 });
