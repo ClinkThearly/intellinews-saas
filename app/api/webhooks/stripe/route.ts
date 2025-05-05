@@ -26,27 +26,43 @@ export async function POST(req: NextRequest) {
 
   if (event.type === 'checkout.session.completed') {
     const s = event.data.object as Stripe.Checkout.Session;
+    const email = s.customer_details?.email;
 
-    // find user by email
-    const { data: user, error } = await supabase
+    if (!email) {
+      console.error('No email on session');
+      return NextResponse.json({ received: true }, { status: 200 });
+    }
+
+    /* 1. get or create profile */
+    let { data: user } = await supabase
       .from('profiles')
       .select('id')
-      .eq('email', s.customer_details?.email)
-      .single();
+      .eq('email', email)
+      .maybeSingle();
 
-    if (error) {
-      console.error('User lookup failed', error);
-    } else if (user) {
-      await supabase.from('subscriptions').upsert({
-        user_id: user.id,
-        stripe_customer_id: s.customer as string,
-        stripe_subscription_id: s.subscription as string,
-        plan: 'pro',
-        status: 'active',
-        current_period_end: new Date(Number(s.expires_at) * 1000).toISOString()
-      });
-      console.log('✅ Subscriptions row saved for', user.id);
+    if (!user) {
+      const { data: newUser, error } = await supabase
+        .from('profiles')
+        .insert({ email })
+        .select('id')
+        .single();
+      if (error) {
+        console.error('Profile insert failed', error);
+        return NextResponse.json({ received: true }, { status: 200 });
+      }
+      user = newUser;
     }
+
+    /* 2. upsert subscription */
+    await supabase.from('subscriptions').upsert({
+      user_id: user.id,
+      stripe_customer_id: s.customer as string,
+      stripe_subscription_id: s.subscription as string,
+      plan: 'pro',
+      status: 'active',
+      current_period_end: new Date(Number(s.expires_at) * 1000).toISOString()
+    });
+    console.log('✅ Subscriptions row saved for', user.id);
   }
 
   return NextResponse.json({ received: true }, { status: 200 });
