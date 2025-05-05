@@ -1,9 +1,9 @@
-/* ---------- app/marketing/layout.tsx (replace whole file) ---------- */
-import '@/app/globals.css';          // Tailwind base & fonts
+/* app/marketing/layout.tsx – FULL FILE */
+import '../globals.css';
 import AnimatedBackground from './components/AnimatedBackground';
 
 export const metadata = {
-  title: 'IntelliNews • Competitive-intelligence briefings',
+  title: 'IntelliNews • Competitive-Intelligence, weekly',
 };
 
 export default function MarketingLayout({
@@ -11,17 +11,21 @@ export default function MarketingLayout({
 }: {
   children: React.ReactNode;
 }) {
+  /*  suppressHydrationWarning prevents the dark-vs-light body-class
+      mismatch you were seeing */
   return (
-    <html lang="en" className="scroll-smooth antialiased">
-      {/* Full-page dark base colour so translucent blacks show correctly */}
-      <body className="relative min-h-screen bg-black text-white">
-        {/* Gradient / grid / blurred lights – covers the whole viewport */}
+    <html
+      suppressHydrationWarning
+      lang="en"
+      className="scroll-smooth antialiased"
+    >
+      <body
+        suppressHydrationWarning
+        className="relative min-h-screen bg-neutral-950 text-white"
+      >
         <AnimatedBackground />
-
-        {/* Actual page content */}
-        <main className="relative z-10">{children}</main>
+        <div className="relative z-10">{children}</div>
       </body>
     </html>
   );
 }
-/* ------------------------------------------------------------------- */
