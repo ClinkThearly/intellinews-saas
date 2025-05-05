@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const email = s.customer_details?.email;
     if (!email) return NextResponse.json({ received: true }, { status: 200 });
 
-    /* 1. ensure an Auth user exists */
+    /* 1. get or create profile + auth user */
     let { data: user } = await supabase
       .from('profiles')
       .select('id')
@@ -37,16 +37,17 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (!user) {
-      // create auth user (no email invite)
-      const { data: authUser, error: authErr } =
+      const { data: authRes, error: authErr } =
         await supabase.auth.admin.createUser({ email, email_confirm: true });
-      if (authErr || !authUser) {
+
+      if (authErr || !authRes?.user) {
         console.error('Auth user create failed', authErr);
         return NextResponse.json({ received: true }, { status: 200 });
       }
-      // add profile row with the same id
-      await supabase.from('profiles').insert({ id: authUser.id, email });
-      user = { id: authUser.id };
+
+      const authId = authRes.user.id;                 // ✅ correct path
+      await supabase.from('profiles').insert({ id: authId, email });
+      user = { id: authId };
     }
 
     /* 2. upsert subscription */
@@ -58,7 +59,6 @@ export async function POST(req: NextRequest) {
       status: 'active',
       current_period_end: new Date(Number(s.expires_at) * 1000).toISOString()
     });
-
     console.log('✅ Subscription saved for', user.id);
   }
 
