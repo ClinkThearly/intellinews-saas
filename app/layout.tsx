@@ -1,39 +1,44 @@
-import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
 import { SWRConfig } from 'swr';
-
-export const metadata: Metadata = {
-  title: 'Next.js SaaS Starter',
-  description: 'Get started quickly with Next.js, Postgres, and Stripe.'
-};
-
-export const viewport: Viewport = {
-  maximumScale: 1
-};
+import './globals.css';
 
 const manrope = Manrope({ subsets: ['latin'] });
 
-export default function RootLayout({
+export const metadata: Metadata = {
+  title: 'IntelliNews - Your Competitive Edge',
+  description: 'AI-powered competitive intelligence briefings tailored to your company and delivered to your inbox.',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
+export default async function RootLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
+  // We can safely use 'await' here because this is a Server Component
+  // This will not block rendering of other parts of the page
+  let userData;
+  try {
+    userData = await getUser();
+  } catch (error) {
+    console.error('Error getting user data:', error);
+    userData = null;
+  }
+
   return (
-    <html
-      lang="en"
-      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
-    >
-      <body className="min-h-[100dvh] bg-gray-50">
-        <SWRConfig
+    <html lang="en">
+      <body className={`${manrope.className} min-h-screen antialiased`}>
+        <SWRConfig 
           value={{
-            fallback: {
-              // We do NOT await here
-              // Only components that read this data will suspend
-              '/api/user': getUser(),
-              '/api/team': getTeamForUser()
-            }
+            fetcher: (url: string) => fetch(url).then(res => res.json()),
+            revalidateOnFocus: false
           }}
         >
           {children}
