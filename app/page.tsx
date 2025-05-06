@@ -14,7 +14,16 @@ import {
 } from 'lucide-react';
 
 /* ---------- 1. Types ---------- */
-type Values = { role: string; industry: string };
+type Values = { 
+  role: string; 
+  industry: string; 
+  company?: string;
+  topics?: string[];
+  geographies?: string[];
+  companies?: string[];
+  useCases?: string[];
+  step: number;
+};
 
 /* ---------- 2. Dropdown Component ---------- */
 function Dropdown({
@@ -79,6 +88,70 @@ function LightBackground() {
 }
 
 /* ---------- 4. One-sentence form ---------- */
+function MultiSelectTag({
+  options,
+  selectedValues,
+  onToggle,
+}: {
+  options: string[];
+  selectedValues: string[];
+  onToggle: (value: string) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2 mt-2">
+      {options.map((option) => {
+        const isSelected = selectedValues.includes(option);
+        return (
+          <button
+            key={option}
+            type="button"
+            onClick={() => onToggle(option)}
+            className={`py-1 px-3 text-xs font-medium rounded-full transition-colors ${
+              isSelected 
+                ? 'bg-blue-100 text-blue-700 border border-blue-200' 
+                : 'bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200'
+            }`}
+          >
+            {isSelected && (
+              <Check className="inline-block mr-1" size={12} />
+            )}
+            {option}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function StepIndicator({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
+  return (
+    <div className="flex items-center justify-between w-full mb-6">
+      {Array.from({ length: totalSteps }, (_, i) => (
+        <div key={i} className="flex items-center flex-1">
+          <div className={`relative flex items-center justify-center w-8 h-8 rounded-full ${
+            i + 1 === currentStep
+              ? 'bg-blue-600 text-white'
+              : i + 1 < currentStep
+                ? 'bg-blue-100 text-blue-700'
+                : 'bg-gray-100 text-gray-400'
+          }`}>
+            {i + 1 < currentStep ? (
+              <Check size={16} />
+            ) : (
+              <span className="text-sm font-semibold">{i + 1}</span>
+            )}
+          </div>
+          {i < totalSteps - 1 && (
+            <div className={`flex-1 h-1 mx-2 ${
+              i + 1 < currentStep ? 'bg-blue-200' : 'bg-gray-200'
+            }`} />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function SentenceForm({
   initialValues,
   onSubmit,
@@ -103,77 +176,291 @@ function SentenceForm({
     "Renewable Energy"
   ];
 
-  const [role, setRole] = useState(initialValues.role);
-  const [industry, setIndustry] = useState(initialValues.industry);
+  const topicOptions = [
+    "Market Trends",
+    "Competitor Updates",
+    "Regulatory Changes",
+    "Technology Innovation",
+    "Investment Activity",
+    "M&A Deals",
+    "Product Launches"
+  ];
+
+  const geographyOptions = [
+    "North America",
+    "Europe",
+    "Asia-Pacific",
+    "Latin America",
+    "Middle East & Africa"
+  ];
+
+  const companyOptions = [
+    "Fortune 500",
+    "Tech Giants",
+    "Startups",
+    "Unicorns",
+    "Public Companies",
+    "Private Equity Backed"
+  ];
+
+  const useCaseOptions = [
+    "Stay Informed",
+    "Shape Strategy",
+    "Identify Threats",
+    "Discover Opportunities",
+    "Benchmark Performance",
+    "Monitor Competitors"
+  ];
+
+  const [formValues, setFormValues] = useState({
+    ...initialValues,
+    company: initialValues.company || "",
+    topics: initialValues.topics || [],
+    geographies: initialValues.geographies || [],
+    companies: initialValues.companies || [],
+    useCases: initialValues.useCases || [],
+    step: initialValues.step || 1
+  });
+
+  const handleNext = () => {
+    if (formValues.step < 3) {
+      setFormValues({...formValues, step: formValues.step + 1});
+    } else {
+      // Submit form when on final step
+      onSubmit(formValues);
+    }
+  };
+
+  const handleBack = () => {
+    if (formValues.step > 1) {
+      setFormValues({...formValues, step: formValues.step - 1});
+    }
+  };
+
+  const toggleArrayValue = (array: string[], value: string) => {
+    return array.includes(value)
+      ? array.filter(item => item !== value)
+      : [...array, value];
+  };
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-md p-6 h-full">
-      <div className="text-center mb-6">
+      <div className="text-center mb-4">
         <h3 className="text-xl font-bold text-gray-900 mb-2">Customize Your Intelligence Brief</h3>
         <p className="text-gray-600 text-sm">Tailor your competitive intelligence to your specific needs</p>
       </div>
       
-      <form
+      <StepIndicator currentStep={formValues.step} totalSteps={3} />
+      
+      <form 
         onSubmit={(e) => {
           e.preventDefault();
-          onSubmit({ role, industry });
+          handleNext();
         }}
-        className="flex flex-col h-[calc(100%-100px)]"
+        className="flex flex-col h-[calc(100%-150px)]"
       >
-        <div className="space-y-6 flex-grow">
-          <div className="text-center text-lg text-gray-800">
-            <p className="leading-relaxed mb-4">
-              I am a{" "}
-              <Dropdown
-                value={role}
-                setValue={setRole}
-                options={roleOptions}
-              />
-              {" "}working in the{" "}
-              <Dropdown
-                value={industry}
-                setValue={setIndustry}
-                options={industryOptions}
-              />
-              {" "}industry.
-            </p>
-          </div>
+        <div className="flex-grow">
+          {/* Step 1: About You */}
+          {formValues.step === 1 && (
+            <div className="space-y-6">
+              <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 mb-5">
+                <h4 className="font-semibold text-blue-800 mb-1 flex items-center">
+                  <span className="bg-blue-100 text-blue-700 w-5 h-5 rounded-full flex items-center justify-center mr-2 text-xs font-bold">1</span>
+                  About You
+                </h4>
+                <p className="text-sm text-blue-700">Tell us about your role and company</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Your Role</label>
+                  <Dropdown
+                    value={formValues.role}
+                    setValue={(role) => setFormValues({...formValues, role})}
+                    options={roleOptions}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Your Industry</label>
+                  <Dropdown
+                    value={formValues.industry}
+                    setValue={(industry) => setFormValues({...formValues, industry})}
+                    options={industryOptions}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Company Name (Optional)</label>
+                  <input
+                    type="text"
+                    value={formValues.company}
+                    onChange={(e) => setFormValues({...formValues, company: e.target.value})}
+                    placeholder="e.g., Acme Corp"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-gray-900 mb-2">What you'll receive:</h4>
-            <ul className="space-y-2 text-sm text-gray-700">
-              <li className="flex items-start">
-                <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
-                  <Check size={16} />
+          {/* Step 2: Intelligence Focus */}
+          {formValues.step === 2 && (
+            <div className="space-y-6">
+              <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 mb-5">
+                <h4 className="font-semibold text-blue-800 mb-1 flex items-center">
+                  <span className="bg-blue-100 text-blue-700 w-5 h-5 rounded-full flex items-center justify-center mr-2 text-xs font-bold">2</span>
+                  Intelligence Focus
+                </h4>
+                <p className="text-sm text-blue-700">Select topics, regions, and companies you want to monitor</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Topics (Select all that apply)</label>
+                  <MultiSelectTag 
+                    options={topicOptions}
+                    selectedValues={formValues.topics || []}
+                    onToggle={(topic) => setFormValues({
+                      ...formValues, 
+                      topics: toggleArrayValue(formValues.topics || [], topic)
+                    })}
+                  />
                 </div>
-                <span>Weekly competitive intelligence tailored to {industry}</span>
-              </li>
-              <li className="flex items-start">
-                <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
-                  <Check size={16} />
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Geographic Focus</label>
+                  <MultiSelectTag 
+                    options={geographyOptions}
+                    selectedValues={formValues.geographies || []}
+                    onToggle={(geography) => setFormValues({
+                      ...formValues, 
+                      geographies: toggleArrayValue(formValues.geographies || [], geography)
+                    })}
+                  />
                 </div>
-                <span>Curated market insights relevant to your role as {role}</span>
-              </li>
-              <li className="flex items-start">
-                <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
-                  <Check size={16} />
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Company Types to Monitor</label>
+                  <MultiSelectTag 
+                    options={companyOptions}
+                    selectedValues={formValues.companies || []}
+                    onToggle={(company) => setFormValues({
+                      ...formValues, 
+                      companies: toggleArrayValue(formValues.companies || [], company)
+                    })}
+                  />
                 </div>
-                <span>AI-powered analysis with actionable recommendations</span>
-              </li>
-            </ul>
-          </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Step 3: Use Cases */}
+          {formValues.step === 3 && (
+            <div className="space-y-6">
+              <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 mb-5">
+                <h4 className="font-semibold text-blue-800 mb-1 flex items-center">
+                  <span className="bg-blue-100 text-blue-700 w-5 h-5 rounded-full flex items-center justify-center mr-2 text-xs font-bold">3</span>
+                  Research Goals
+                </h4>
+                <p className="text-sm text-blue-700">How will you use this intelligence in your work?</p>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Select Your Goals (Choose all that apply)</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                  {useCaseOptions.map((useCase) => {
+                    const isSelected = (formValues.useCases || []).includes(useCase);
+                    return (
+                      <div 
+                        key={useCase}
+                        onClick={() => setFormValues({
+                          ...formValues,
+                          useCases: toggleArrayValue(formValues.useCases || [], useCase)
+                        })}
+                        className={`cursor-pointer rounded-lg p-3 border transition-all ${
+                          isSelected
+                            ? 'border-blue-200 bg-blue-50'
+                            : 'border-gray-200 bg-white hover:bg-gray-50'
+                        }`}
+                      >
+                        <div className="flex items-start">
+                          <div className={`mt-0.5 h-5 w-5 flex-shrink-0 rounded-full border ${
+                            isSelected ? 'border-blue-600 bg-blue-600' : 'border-gray-300'
+                          } flex items-center justify-center`}>
+                            {isSelected && <Check size={12} className="text-white" />}
+                          </div>
+                          <div className="ml-3">
+                            <h5 className={`font-medium ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>{useCase}</h5>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {useCase === "Stay Informed" && "Get regular updates on industry developments"}
+                              {useCase === "Shape Strategy" && "Use insights to inform strategic decisions"}
+                              {useCase === "Identify Threats" && "Spot emerging competitive threats early"}
+                              {useCase === "Discover Opportunities" && "Find new market opportunities"}
+                              {useCase === "Benchmark Performance" && "Compare against industry standards"}
+                              {useCase === "Monitor Competitors" && "Track competitor moves and announcements"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">What you'll receive:</h4>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start">
+                    <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                      <Check size={16} />
+                    </div>
+                    <span>Weekly competitive intelligence tailored to {formValues.industry}</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                      <Check size={16} />
+                    </div>
+                    <span>Curated market insights relevant to your role as {formValues.role}</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                      <Check size={16} />
+                    </div>
+                    <span>AI-powered analysis with actionable recommendations</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
         
-        <div className="mt-6 text-center">
+        <div className="mt-6 flex justify-between items-center">
+          {formValues.step > 1 ? (
+            <button 
+              type="button" 
+              onClick={handleBack}
+              className="text-gray-600 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+            >
+              Back
+            </button>
+          ) : (
+            <div></div> // Empty div to maintain flex layout
+          )}
+          
           <button
             type="submit"
-            className="inline-flex items-center bg-blue-600 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:bg-blue-700"
+            className={`inline-flex items-center ${
+              formValues.step === 3 
+                ? 'bg-blue-600 hover:bg-blue-700' 
+                : 'bg-blue-600 hover:bg-blue-700'
+            } text-white px-5 py-2.5 rounded-md text-sm font-medium transition-all`}
           >
-            Generate my preview
+            {formValues.step === 3 ? 'Generate my preview' : 'Continue'}
             <ArrowUpRight size={16} className="ml-2" />
           </button>
-          <p className="mt-3 text-gray-500 text-xs">No credit card required</p>
         </div>
+        <p className="mt-3 text-gray-500 text-xs text-center">No credit card required</p>
       </form>
     </div>
   );
@@ -317,6 +604,11 @@ export default function HomePage() {
   const [form, setForm] = useState<Values>({
     role: 'VP of Strategy',
     industry: 'FinTech',
+    step: 1,
+    topics: [],
+    geographies: [],
+    companies: [],
+    useCases: []
   });
 
   return (
@@ -324,7 +616,7 @@ export default function HomePage() {
       <LightBackground />
 
       {/* Hero Section */}
-      <header className="relative z-10 py-20 text-center px-6">
+      <header className="relative z-10 py-16 md:py-20 text-center px-6">
         <div className="inline-flex items-center mb-5 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full">
           <span className="text-blue-700 text-xs mr-2 font-medium">NEW</span>
           <span className="text-gray-700 text-xs">Personalised AI-driven intelligence</span>
@@ -337,7 +629,7 @@ export default function HomePage() {
           </span>
         </h1>
         
-        <p className="text-gray-700 text-lg md:text-xl max-w-3xl mx-auto mb-16">
+        <p className="text-gray-700 text-lg md:text-xl max-w-3xl mx-auto mb-12">
           AI-powered competitive-intelligence briefings tailored to your company
           and delivered to your inbox.
         </p>
@@ -348,16 +640,103 @@ export default function HomePage() {
         </div>
       </header>
       
+      {/* How It Works Section */}
+      <section className="py-20 px-6 bg-gray-50 border-y border-gray-200">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">How IntelliNews Works</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm transition-all hover:shadow-md relative">
+              <div className="absolute -top-4 left-6 w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">1</div>
+              <div className="pt-3">
+                <h3 className="text-gray-900 text-xl font-bold mb-3">Tell us about yourself</h3>
+                <p className="text-gray-700">Share your role, industry, and company details so we can tailor intelligence to your specific situation.</p>
+                <div className="mt-5 bg-blue-50 rounded-lg p-3 border border-blue-100">
+                  <p className="text-sm text-blue-700 font-medium">We personalize for:</p>
+                  <ul className="mt-2 space-y-1">
+                    <li className="text-sm text-gray-700 flex items-start">
+                      <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                        <Check size={14} />
+                      </div>
+                      <span>Job function & responsibilities</span>
+                    </li>
+                    <li className="text-sm text-gray-700 flex items-start">
+                      <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                        <Check size={14} />
+                      </div>
+                      <span>Industry-specific challenges</span>
+                    </li>
+                    <li className="text-sm text-gray-700 flex items-start">
+                      <div className="text-blue-600 mr-2 mt-0.5 flex-shrink-0">
+                        <Check size={14} />
+                      </div>
+                      <span>Company size & market position</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm transition-all hover:shadow-md relative">
+              <div className="absolute -top-4 left-6 w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">2</div>
+              <div className="pt-3">
+                <h3 className="text-gray-900 text-xl font-bold mb-3">Set your intelligence focus</h3>
+                <p className="text-gray-700">Choose the topics, geographies, and companies most relevant to your strategic priorities.</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <span className="inline-block py-1 px-3 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Market Trends</span>
+                  <span className="inline-block py-1 px-3 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Competitor Updates</span>
+                  <span className="inline-block py-1 px-3 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">North America</span>
+                  <span className="inline-block py-1 px-3 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Europe</span>
+                  <span className="inline-block py-1 px-3 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Tech Giants</span>
+                  <span className="inline-block py-1 px-3 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Startups</span>
+                  <span className="inline-block py-1 px-3 text-xs font-medium bg-gray-100 text-gray-500 rounded-full">+more</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm transition-all hover:shadow-md relative">
+              <div className="absolute -top-4 left-6 w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">3</div>
+              <div className="pt-3">
+                <h3 className="text-gray-900 text-xl font-bold mb-3">Define your goals</h3>
+                <p className="text-gray-700">Specify how you'll use the intelligence – from staying informed to shaping strategy and identifying opportunities.</p>
+                <div className="mt-5 space-y-2">
+                  <div className="flex items-center p-2 bg-blue-50 rounded-md">
+                    <div className="h-4 w-4 bg-blue-600 rounded-full flex items-center justify-center mr-2">
+                      <Check size={10} className="text-white" />
+                    </div>
+                    <span className="text-sm text-blue-700">Shape Strategy</span>
+                  </div>
+                  <div className="flex items-center p-2 bg-blue-50 rounded-md">
+                    <div className="h-4 w-4 bg-blue-600 rounded-full flex items-center justify-center mr-2">
+                      <Check size={10} className="text-white" />
+                    </div>
+                    <span className="text-sm text-blue-700">Monitor Competitors</span>
+                  </div>
+                  <div className="flex items-center p-2 bg-blue-50 rounded-md">
+                    <div className="h-4 w-4 bg-blue-600 rounded-full flex items-center justify-center mr-2">
+                      <Check size={10} className="text-white" />
+                    </div>
+                    <span className="text-sm text-blue-700">Discover Opportunities</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Features Section */}
       <section className="py-20 px-6 max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">Intelligence that drives decisions</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">Intelligence that drives decisions</h2>
+        <p className="text-center text-gray-700 max-w-3xl mx-auto mb-16">Our AI-powered platform delivers actionable insights that help you stay ahead of market changes and competitive threats.</p>
+        
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm transition-all hover:shadow-md">
             <div className="inline-block p-3 bg-blue-50 rounded-lg mb-4">
               <Search size={24} className="text-blue-600" />
             </div>
             <h3 className="text-gray-900 text-lg font-bold mb-2">Comprehensive coverage</h3>
-            <p className="text-gray-700 leading-relaxed">500k+ sources scanned every day so you never miss a signal.</p>
+            <p className="text-gray-700 leading-relaxed">500k+ sources scanned every day so you never miss a signal or emerging trend in your market.</p>
           </div>
           
           <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm transition-all hover:shadow-md">
@@ -365,7 +744,7 @@ export default function HomePage() {
               <BarChart size={24} className="text-blue-600" />
             </div>
             <h3 className="text-gray-900 text-lg font-bold mb-2">Actionable insights</h3>
-            <p className="text-gray-700 leading-relaxed">Each story arrives with summary and first-draft commentary.</p>
+            <p className="text-gray-700 leading-relaxed">Each story arrives with summary and first-draft commentary to help inform strategic decisions.</p>
           </div>
           
           <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm transition-all hover:shadow-md">
@@ -373,19 +752,62 @@ export default function HomePage() {
               <Shield size={24} className="text-blue-600" />
             </div>
             <h3 className="text-gray-900 text-lg font-bold mb-2">Privacy first</h3>
-            <p className="text-gray-700 leading-relaxed">Your prompts never leave our encrypted store.</p>
+            <p className="text-gray-700 leading-relaxed">Your prompts never leave our encrypted store, ensuring your competitive strategy remains confidential.</p>
+          </div>
+        </div>
+      </section>
+      
+      {/* Testimonials Section */}
+      <section className="py-20 px-6 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-16">Trusted by strategy leaders</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+              <div className="flex items-center mb-4">
+                <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold mr-3">JD</div>
+                <div>
+                  <h4 className="font-bold text-gray-900">James Davis</h4>
+                  <p className="text-sm text-gray-600">VP of Strategy, FinTech Co.</p>
+                </div>
+              </div>
+              <p className="text-gray-700">"IntelliNews has cut my research time in half. The weekly briefings highlight exactly what I need to know about our competitors and market trends."</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+              <div className="flex items-center mb-4">
+                <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold mr-3">SR</div>
+                <div>
+                  <h4 className="font-bold text-gray-900">Sarah Rodriguez</h4>
+                  <p className="text-sm text-gray-600">CSO, Healthcare Innovation</p>
+                </div>
+              </div>
+              <p className="text-gray-700">"The personalization is impressive. Every report feels like it was created specifically for our team's strategic priorities and challenges."</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+              <div className="flex items-center mb-4">
+                <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold mr-3">MK</div>
+                <div>
+                  <h4 className="font-bold text-gray-900">Michael Kim</h4>
+                  <p className="text-sm text-gray-600">Competitive Intel Lead, Tech Group</p>
+                </div>
+              </div>
+              <p className="text-gray-700">"We spotted a major market opportunity through IntelliNews that our internal research had missed. The ROI has been incredible."</p>
+            </div>
           </div>
         </div>
       </section>
       
       {/* CTA Section */}
-      <section className="py-16 px-6 mb-16">
-        <div className="max-w-4xl mx-auto bg-blue-50 border border-blue-100 rounded-xl p-8 md:p-12 text-center">
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Ready to try IntelliNews?</h3>
-          <p className="text-gray-700 mb-8">Join strategy teams already saving hours every week.</p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition">
-            Start free trial <ArrowUpRight size={16} className="inline ml-1" />
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto bg-blue-600 rounded-xl p-8 md:p-12 text-center shadow-lg">
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Ready to gain your competitive edge?</h3>
+          <p className="text-blue-100 mb-8">Join strategy teams already saving hours every week with personalized intelligence briefings.</p>
+          <button className="bg-white text-blue-700 hover:bg-blue-50 px-8 py-4 rounded-lg font-bold text-lg transition-colors">
+            Get started free <ArrowUpRight size={20} className="inline ml-2" />
           </button>
+          <p className="mt-4 text-blue-200 text-sm">No credit card required. Free 14-day trial.</p>
         </div>
       </section>
       
