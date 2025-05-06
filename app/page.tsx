@@ -629,55 +629,64 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <header className="relative z-10 pt-16 pb-8 md:pt-24 md:pb-16 text-center px-6">
-        <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-full shadow-sm">
-            <span className="text-blue-700 text-xs font-semibold mr-2 bg-blue-100 px-2 py-0.5 rounded-full">LAUNCHING</span>
+      <header className="relative z-10 container mx-auto max-w-screen-xl pt-16 pb-8 md:pt-24 md:pb-16 px-4 sm:px-6 lg:px-8">
+        {/* Top badge - centered using flex utilities for precise alignment */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex items-center px-4 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-full shadow-sm">
+            <span className="text-blue-700 text-xs font-semibold mr-2.5 bg-blue-100 px-2.5 py-0.5 rounded-full">LAUNCHING</span>
             <span className="text-gray-700 text-xs">Join the exclusive early access waitlist</span>
           </div>
         </div>
 
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-8 max-w-5xl mx-auto">
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">Turn market noise into your</span>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700">
-            strategic advantage
-          </span>
-        </h1>
-        
-        <p className="text-gray-700 text-xl md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed">
-          AI-powered competitive intelligence briefings that <span className="font-medium text-blue-700">cut through the noise</span>, tailored to your exact role and priorities.
-        </p>
+        {/* Headline - using container pattern with max width and precise text sizing */}
+        <div className="text-center mx-auto max-w-[85ch] mb-8">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 pb-1">Turn market noise into your</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700">
+              strategic advantage
+            </span>
+          </h1>
+          
+          <p className="text-gray-700 text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto mb-8 leading-relaxed">
+            AI-powered competitive intelligence briefings that <span className="font-medium text-blue-700">cut through the noise</span>, tailored to your exact role and priorities.
+          </p>
+        </div>
 
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          <div className="flex items-center bg-white shadow-sm rounded-full px-3 py-1.5 border border-gray-100">
-            <svg className="text-yellow-500 h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+        {/* Social proof row - using flex with consistent spacing and alignment */}
+        <div className="flex flex-wrap justify-center items-center gap-4 mb-16">
+          <div className="flex items-center bg-white shadow-sm rounded-full px-4 py-2 border border-gray-100">
+            <svg className="text-yellow-500 h-5 w-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
             </svg>
             <span className="text-gray-700 text-sm font-medium">4.9/5 from early users</span>
           </div>
           
-          <div className="flex items-center bg-white shadow-sm rounded-full px-3 py-1.5 border border-gray-100">
-            <svg className="text-green-500 h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <div className="flex items-center bg-white shadow-sm rounded-full px-4 py-2 border border-gray-100">
+            <svg className="text-green-500 h-5 w-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
             </svg>
             <span className="text-gray-700 text-sm font-medium">Fortune 500 trusted</span>
           </div>
           
-          <div className="flex items-center bg-white shadow-sm rounded-full px-3 py-1.5 border border-gray-100">
-            <svg className="text-blue-500 h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <div className="flex items-center bg-white shadow-sm rounded-full px-4 py-2 border border-gray-100">
+            <svg className="text-blue-500 h-5 w-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
             </svg>
             <span className="text-gray-700 text-sm font-medium">SOC-2 Compliant</span>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-10 md:gap-16 max-w-7xl mx-auto">
-          <div className="order-2 lg:order-1 flex flex-col justify-center">
-            <SentenceForm initialValues={form} onSubmit={setForm} />
+        {/* Hero 2-column grid with consistent spacing - form and preview */}
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 max-w-7xl mx-auto">
+          <div className="order-2 lg:order-1">
+            <div className="h-full flex flex-col justify-center rounded-xl overflow-hidden">
+              <SentenceForm initialValues={form} onSubmit={setForm} />
+            </div>
           </div>
           
-          <div className="order-1 lg:order-2 flex flex-col">
-            <div className="relative h-full">
+          <div className="order-1 lg:order-2">
+            <div className="relative h-full pt-2 pb-2 px-3">
+              {/* Decorative elements with precise positioning */}
               <div className="absolute -top-6 -left-6 w-12 h-12 bg-blue-100 rounded-lg transform rotate-12 shadow-lg hidden md:block"></div>
               <div className="absolute -top-4 -right-4 w-8 h-8 bg-indigo-100 rounded-full shadow-md hidden md:block"></div>
               <div className="absolute -bottom-6 -right-6 w-10 h-10 bg-blue-50 rounded-lg transform -rotate-12 shadow-md hidden md:block"></div>
@@ -688,51 +697,60 @@ export default function HomePage() {
         </div>
       </header>
       
-      {/* Process Section with Graphics */}
-      <section className="py-24 px-6 relative overflow-hidden">
+      {/* Process Section with Graphics - using 8-pt grid system */}
+      <section className="py-24 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-50 opacity-30 z-0 rounded-l-[100px]"></div>
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="flex flex-col md:flex-row items-center justify-between mb-20">
-            <div className="md:w-1/2 mb-10 md:mb-0">
+        
+        {/* Container with proper max-width and responsive padding */}
+        <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Intro row with proper columns and spacing */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mb-16 md:mb-24">
+            <div className="md:col-span-7 lg:col-span-6 md:pr-8">
               <div className="inline-flex items-center px-3 py-1 bg-blue-100 rounded-full text-blue-700 text-xs font-semibold mb-6">
                 PROPRIETARY PROCESS
               </div>
-              <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
                 AI Intelligence <span className="text-blue-600">Tailored in 3 Steps</span>
               </h2>
-              <p className="text-xl text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-700 leading-relaxed">
                 Our proprietary AI system tailors industry intelligence specifically for your role and strategic objectives - leveraging data from over 500,000 sources updated in real-time.
               </p>
             </div>
             
-            <div className="md:w-2/5 relative">
-              <img 
-                src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                alt="Strategic intelligence dashboard" 
-                className="rounded-xl shadow-xl"
-              />
-              <div className="absolute -top-4 -right-4 w-12 h-12 bg-blue-100 rounded-lg transform rotate-12 shadow-lg"></div>
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-indigo-100 rounded-xl transform -rotate-6 shadow-md"></div>
+            <div className="md:col-span-5 lg:col-span-6 relative">
+              <div className="rounded-xl shadow-xl overflow-hidden relative">
+                <img 
+                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                  alt="Strategic intelligence dashboard" 
+                  className="w-full h-auto object-cover"
+                />
+                {/* Decorative elements with consistent sizing */}
+                <div className="absolute -top-4 -right-4 w-12 h-12 bg-blue-100 rounded-lg transform rotate-12 shadow-lg hidden md:block"></div>
+                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-indigo-100 rounded-xl transform -rotate-6 shadow-md hidden md:block"></div>
+              </div>
             </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 md:gap-16 relative">
-            {/* Connecting Line */}
+          {/* Process steps with proper grid system */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 xl:gap-12 relative">
+            {/* Connecting Line with proper z-index and positioning */}
             <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-200 via-blue-400 to-indigo-400 transform -translate-y-1/2 z-0"></div>
             
-            <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg transition-all hover:shadow-xl relative z-10">
+            {/* Step 1 Card - using consistent spacing and proportions */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-lg transition-all hover:shadow-xl relative z-10">
               <div className="absolute -top-6 w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold left-1/2 transform -translate-x-1/2 shadow-lg">1</div>
-              <div className="pt-6 text-center mb-6">
-                <h3 className="text-gray-900 text-2xl font-bold mb-4">Your Role & Context</h3>
+              <div className="pt-8 text-center mb-4">
+                <h3 className="text-gray-900 text-xl font-bold mb-4">Your Role & Context</h3>
                 <div className="w-16 h-1 bg-blue-500 mx-auto rounded-full mb-6"></div>
                 <p className="text-gray-700 leading-relaxed mb-6">
                   Our AI calibrates to your specific role, industry, and business context to deliver precision intelligence.
                 </p>
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
-                  <div className="flex flex-col space-y-3">
+                  <div className="flex flex-col space-y-4">
+                    {/* List items with consistent spacing and alignment */}
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                        <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -740,7 +758,7 @@ export default function HomePage() {
                     </div>
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                        <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8v2h1v1H4v-1h1v-2H4v-1h16v1h-1z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -748,7 +766,7 @@ export default function HomePage() {
                     </div>
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                        <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 003 8v7a1 1 0 100 2h14a1 1 0 100-2V8a1 1 0 00.496-1.868l-7-4zM6 9a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1zm3 1a1 1 0 012 0v3a1 1 0 11-2 0v-3zm5-1a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -759,46 +777,50 @@ export default function HomePage() {
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg transition-all hover:shadow-xl relative z-10 md:mt-10">
+            {/* Step 2 Card */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-lg transition-all hover:shadow-xl relative z-10 md:mt-10">
               <div className="absolute -top-6 w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-xl font-bold left-1/2 transform -translate-x-1/2 shadow-lg">2</div>
-              <div className="pt-6 text-center mb-6">
-                <h3 className="text-gray-900 text-2xl font-bold mb-4">Intelligence Focus</h3>
+              <div className="pt-8 text-center mb-4">
+                <h3 className="text-gray-900 text-xl font-bold mb-4">Intelligence Focus</h3>
                 <div className="w-16 h-1 bg-indigo-500 mx-auto rounded-full mb-6"></div>
                 <p className="text-gray-700 leading-relaxed mb-6">
                   Set precise parameters for the strategic intelligence that matters most to your business objectives.
                 </p>
-                <div className="flex flex-wrap justify-center gap-2 mb-4">
+                {/* Grid layout for tags with consistent sizing */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                   <div className="flex items-center px-4 py-2 bg-indigo-50 rounded-lg border border-indigo-100">
-                    <div className="w-3 h-3 bg-indigo-400 rounded-full mr-2"></div>
+                    <div className="w-3 h-3 bg-indigo-400 rounded-full mr-2 flex-shrink-0"></div>
                     <span className="text-sm font-medium text-gray-800">Market Trends</span>
                   </div>
                   <div className="flex items-center px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
-                    <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
+                    <div className="w-3 h-3 bg-blue-400 rounded-full mr-2 flex-shrink-0"></div>
                     <span className="text-sm font-medium text-gray-800">Competitive Moves</span>
                   </div>
                   <div className="flex items-center px-4 py-2 bg-indigo-50 rounded-lg border border-indigo-100">
-                    <div className="w-3 h-3 bg-indigo-400 rounded-full mr-2"></div>
+                    <div className="w-3 h-3 bg-indigo-400 rounded-full mr-2 flex-shrink-0"></div>
                     <span className="text-sm font-medium text-gray-800">Technology</span>
                   </div>
                   <div className="flex items-center px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
-                    <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
+                    <div className="w-3 h-3 bg-blue-400 rounded-full mr-2 flex-shrink-0"></div>
                     <span className="text-sm font-medium text-gray-800">M&A Activity</span>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg transition-all hover:shadow-xl relative z-10 md:mt-20">
+            {/* Step 3 Card */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-lg transition-all hover:shadow-xl relative z-10 md:mt-20">
               <div className="absolute -top-6 w-14 h-14 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xl font-bold left-1/2 transform -translate-x-1/2 shadow-lg">3</div>
-              <div className="pt-6 text-center mb-6">
-                <h3 className="text-gray-900 text-2xl font-bold mb-4">Strategic Application</h3>
+              <div className="pt-8 text-center mb-4">
+                <h3 className="text-gray-900 text-xl font-bold mb-4">Strategic Application</h3>
                 <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full mb-6"></div>
                 <p className="text-gray-700 leading-relaxed mb-6">
                   Define how you'll leverage our intelligence to drive strategic decisions and competitive advantage.
                 </p>
-                <div className="space-y-3">
+                {/* Consistent spacing between items */}
+                <div className="space-y-4">
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-lg flex items-center">
-                    <div className="flex-shrink-0 h-7 w-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white mr-3">
+                    <div className="flex-shrink-0 h-8 w-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white mr-3">
                       <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
                         <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
@@ -807,7 +829,7 @@ export default function HomePage() {
                     <span className="font-medium text-gray-800">Shape Strategy</span>
                   </div>
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-lg flex items-center">
-                    <div className="flex-shrink-0 h-7 w-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white mr-3">
+                    <div className="flex-shrink-0 h-8 w-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white mr-3">
                       <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z" clipRule="evenodd" />
                       </svg>
@@ -815,7 +837,7 @@ export default function HomePage() {
                     <span className="font-medium text-gray-800">Identify Opportunities</span>
                   </div>
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-lg flex items-center">
-                    <div className="flex-shrink-0 h-7 w-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white mr-3">
+                    <div className="flex-shrink-0 h-8 w-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md flex items-center justify-center text-white mr-3">
                       <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M12 15a1 1 0 100-2 1 1 0 000 2zm-1-4a1 1 0 11-2 0 1 1 0 012 0zm-7 2a1 1 0 100-2 1 1 0 000 2zm2-1a1 1 0 11-2 0 1 1 0 012 0zm14-1a1 1 0 100-2 1 1 0 000 2zm-7 2a1 1 0 11-2 0 1 1 0 012 0zM3 7a1 1 0 100-2 1 1 0 000 2zm2-1a1 1 0 11-2 0 1 1 0 012 0zm14-1a1 1 0 100-2 1 1 0 000 2zm-7 2a1 1 0 11-2 0 1 1 0 012 0z" clipRule="evenodd" />
                       </svg>
@@ -829,25 +851,31 @@ export default function HomePage() {
         </div>
       </section>
       
-      {/* Features Section with Comparison */}
-      <section className="py-24 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+      {/* Features Section with Comparison - using precise 8pt grid */}
+      <section className="py-24 bg-gray-50">
+        <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          {/* Heading with proper spacing and alignment */}
+          <div className="text-center mb-16 md:mb-20">
             <div className="inline-flex items-center px-3 py-1 bg-indigo-100 rounded-full text-indigo-700 text-xs font-semibold mb-4">
               ENTERPRISE-GRADE FEATURES
             </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-5">Intelligence that <span className="text-blue-600">powers decisions</span></h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-5 tracking-tight">
+              Intelligence that <span className="text-blue-600">powers decisions</span>
+            </h2>
+            <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
               IntelliNews delivers mission-critical competitive insights that top strategic teams use to gain market advantage.
             </p>
           </div>
           
-          <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-5">
-                <h3 className="text-white text-xl font-bold">Before IntelliNews</h3>
+          {/* Comparison cards with consistent spacing */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-20">
+            {/* "Before" Card */}
+            <div className="bg-white rounded-xl shadow-xl overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+                <h3 className="text-white text-lg font-bold">Before IntelliNews</h3>
               </div>
-              <div className="p-8 space-y-6">
+              <div className="p-6 lg:p-8 space-y-6">
+                {/* List items with consistent spacing and alignment */}
                 <div className="flex items-start">
                   <div className="flex-shrink-0 h-8 w-8 bg-red-100 rounded-full flex items-center justify-center text-red-500 mt-0.5">
                     <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -898,11 +926,12 @@ export default function HomePage() {
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-5">
-                <h3 className="text-white text-xl font-bold">With IntelliNews</h3>
+            {/* "After" Card */}
+            <div className="bg-white rounded-xl shadow-xl overflow-hidden h-full">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                <h3 className="text-white text-lg font-bold">With IntelliNews</h3>
               </div>
-              <div className="p-8 space-y-6">
+              <div className="p-6 lg:p-8 space-y-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0 h-8 w-8 bg-green-100 rounded-full flex items-center justify-center text-green-600 mt-0.5">
                     <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -954,68 +983,70 @@ export default function HomePage() {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-x-8 gap-y-12">
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
-              <div className="absolute -top-5 left-6 h-10 w-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white">
+          {/* Features grid with consistent spacing and alignment */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature cards with consistent height and spacing */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
+              <div className="absolute -top-5 left-8 h-10 w-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white">
                 <Search size={20} />
               </div>
-              <div className="pt-5">
+              <div className="pt-6">
                 <h3 className="text-gray-900 text-xl font-bold mb-3">AI-Powered Scanning</h3>
                 <p className="text-gray-700 leading-relaxed">Our proprietary AI scans over 500,000 sources daily, identifying strategic signals with 98.7% accuracy.</p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
-              <div className="absolute -top-5 left-6 h-10 w-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center text-white">
+            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
+              <div className="absolute -top-5 left-8 h-10 w-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center text-white">
                 <BarChart size={20} />
               </div>
-              <div className="pt-5">
+              <div className="pt-6">
                 <h3 className="text-gray-900 text-xl font-bold mb-3">Strategic Analysis</h3>
                 <p className="text-gray-700 leading-relaxed">Each insight includes first-draft analysis and potential strategic implications unique to your business context.</p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
-              <div className="absolute -top-5 left-6 h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white">
+            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
+              <div className="absolute -top-5 left-8 h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white">
                 <Shield size={20} />
               </div>
-              <div className="pt-5">
+              <div className="pt-6">
                 <h3 className="text-gray-900 text-xl font-bold mb-3">Enterprise Security</h3>
                 <p className="text-gray-700 leading-relaxed">SOC-2 compliant, zero-knowledge encryption ensures your strategic data and queries remain confidential.</p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
-              <div className="absolute -top-5 left-6 h-10 w-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white">
+            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
+              <div className="absolute -top-5 left-8 h-10 w-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white">
                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z" />
                 </svg>
               </div>
-              <div className="pt-5">
+              <div className="pt-6">
                 <h3 className="text-gray-900 text-xl font-bold mb-3">Real-time Alerts</h3>
                 <p className="text-gray-700 leading-relaxed">Critical intelligence delivered in real-time when market-changing events occur in your industry.</p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
-              <div className="absolute -top-5 left-6 h-10 w-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center text-white">
+            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
+              <div className="absolute -top-5 left-8 h-10 w-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center text-white">
                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
               </div>
-              <div className="pt-5">
+              <div className="pt-6">
                 <h3 className="text-gray-900 text-xl font-bold mb-3">API Integration</h3>
                 <p className="text-gray-700 leading-relaxed">Seamlessly integrate with your existing tools and workflows for maximum productivity.</p>
               </div>
             </div>
             
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
-              <div className="absolute -top-5 left-6 h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white">
+            <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-md transition-all hover:shadow-lg relative">
+              <div className="absolute -top-5 left-8 h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white">
                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
                 </svg>
               </div>
-              <div className="pt-5">
+              <div className="pt-6">
                 <h3 className="text-gray-900 text-xl font-bold mb-3">Dedicated Support</h3>
                 <p className="text-gray-700 leading-relaxed">Enterprise customers receive dedicated strategy consultants to maximize intelligence value.</p>
               </div>
